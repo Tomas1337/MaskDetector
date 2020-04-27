@@ -11,16 +11,15 @@ vs = VideoStream(src=1).start()
 
 Download prediction model and place on root
 
-https://drive.google.com/file/d/1lR5EgA93mW9kzcAW1MTJybat9PfRe33V/view?usp=sharing
+https://drive.google.com/file/d/1NKXeHM8NKSIb0wSnG6vij30afkY6arZK/view?usp=sharing
 
 To be done:
 
-1. Upgrade model to a light weight model
 
-2. Increase training data size (Trained on fast ai resnet34)
+1 Increase training data size (Trained on fast ai resnet34)
 
-3. Deploy on web app
+2. Deploy on web app
 
-4. Make asyncrohous
+3. Make asyncrohous
 
 
