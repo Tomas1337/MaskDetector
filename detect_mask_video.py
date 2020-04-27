@@ -10,7 +10,7 @@ import imutils
 import time
 import cv2
 import os
-
+from PIL import Image
 def detect_and_predict_age(frame, faceNet, mask_model, minConf=0.5):
 	global frame_count
 	# define the list of age buckets our age detector will predict
@@ -46,23 +46,21 @@ def detect_and_predict_age(frame, faceNet, mask_model, minConf=0.5):
 
 			# extract the ROI of the face
 			face = frame[startY:endY, startX:endX]
-
-			##Try a trained model with normalized faces
-
+			
 			# ensure the face ROI is sufficiently large
-			if face.shape[0] < 20 or face.shape[1] < 20:
+			if face.shape[0] < 10 or face.shape[1] < 10:
 				continue
 
 			# construct a blob from *just* the face ROI
 
 			#toc1 = time.perf_counter()
-			faceBlob = cv2.dnn.blobFromImage(face, 1.0, (227, 227),
-				(78.4263377603, 87.7689143744, 114.895847746),
-				swapRB=False)
+			#faceBlob = cv2.dnn.blobFromImage(face, 1.0, (227, 227),
+			#	(78.4263377603, 87.7689143744, 114.895847746),
+			#	swapRB=False)
             
             #Process Prediction
 			#Find a way for this to be an asynchronous task
-			mask_results = maskNet.maskPredict(frame)
+			mask_results = maskNet.maskPredict(face)
 			mask_prediction = mask_results[1].item()
 			mask_score = mask_results[0].item()
            
@@ -95,9 +93,11 @@ faceNet = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 # load our traced mask detector model from disk
 print("[INFO] loading mask detector model...")
-#mask_model = loadtracedModel('squeezeNet.pt')
-maskNet = maskPredictor() 
-maskNet.loadtrace('modelResNet34.pt')
+
+#maskNet = maskPredictor() 
+#maskNet = maskPredictor_fastai() #For mobilenet
+maskNet = maskPredictor_fastai()
+#maskNet.loadtrace('modelResNet34.pt')
 
 
 # initialize the video stream and allow the camera sensor to warm up
@@ -105,19 +105,22 @@ print("[INFO] starting video stream...")
 vs = VideoStream(src=1).start()
 time.sleep(2.0)
 pred_dict = {0: 'No Mask',1: 'With Mask'}
-frame_count = 0
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
 	# to have a maximum width of 400 pixels
 	frame = vs.read()
+	#frame = Image.open('data/images/2.jpg')
+	#frame = np.asarray(frame)
 	frame = imutils.resize(frame, width=400)
+	
 	
 	# detect faces in the frame, and for each face in the frame,
 	# predict the age
 	results = detect_and_predict_age(frame, faceNet, maskNet,
 		minConf=args["confidence"])
 
+	#print(results)		
 	# loop over the results
 	for r in results:
 		# draw the bounding box of the face along with the associated
@@ -132,14 +135,17 @@ while True:
 		cv2.putText(frame, text, (startX, y),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
+		#Show Face Frame	
+		#face = frame[startY:endY, startX:endX]
 	# show the output frame
+	cv2.namedWindow("Frame")
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
-	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
 		break
-		
+
+	# if the `q` key was pressed, break from the loop
 # do a bit of cleanup
 cv2.destroyAllWindows()
 vs.stop()
