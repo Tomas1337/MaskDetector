@@ -15,10 +15,20 @@ Update 5/1/2020
 Added a module to stream youtube video and live apply the detection algorithsm
 Added capability to switch between Face Detection models on call. ResCaffe has a good FPS but medium performance on face detection. MTCNN is great at face detection but is slow. FastMTCC gives good face detection and is a bit faster. Recommend to use MTCNN when collecting data or with use of GPUs. Recommend to use ResCaffe for standard application
 
-Although, there is only one 
 
+Face Detection:
+Download prediction model and proto.txt and place in face_detector folder
+
+Face Detector: https://drive.google.com/open?id=13znqNpEPEFXCCWYG9a1PUMANzMJSX4x4
+
+Mask detection:
 Download prediction model and place on root/data/models
-https://drive.google.com/open?id=1ZXxYqsO-MlkjIgeS8caVvO1J8QENF4Eb
+
+Mask Detecor:https://drive.google.com/open?id=1ZXxYqsO-MlkjIgeS8caVvO1J8QENF4Eb
+
+
+
+
 To be done:
 
 
