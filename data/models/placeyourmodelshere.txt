@@ -1,0 +1,2 @@
+Place your pretrained models here.
+Requires both rescaffe and facedetection model
