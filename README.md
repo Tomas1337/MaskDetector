@@ -1,4 +1,4 @@
-# MaskDetector
+# Face Mask Detector
 Real Time Mask Detector
 
 A simple pipeline to detect whether a person is wearing a mask or not in a Video Stream.
@@ -10,6 +10,11 @@ By Default, it uses an External Camera (src=1)
 Change src=0 to use built in camera on 'Play webcam stream'
 vs = VideoStream(src=1).start()
 
+
+Update 5/12
+Updated the class objects and function to add in facial tracking. This is so we can use the reliability of the MTCNN network while maintaining excellent FPS.
+
+Testing on google cloud Functions has also yielded a speed of about 900ms per mask inference. Not all useful for our case.
 
 Update 5/1/2020
 Added a module to stream youtube video and live apply the detection algorithsm
@@ -32,10 +37,7 @@ Mask Detecor:https://drive.google.com/open?id=1ZXxYqsO-MlkjIgeS8caVvO1J8QENF4Eb
 To be done:
 
 
-1 Increase training data size (Trained on fast ai resnet34)
+1. Gather more data that has less reolution and more noise. Watch the accuracy score (4.3 RMSE) if you introduce noisier images. THis is for the purpose of looking at low resolution and far objects.
 
-2. Deploy on web app
-
-3. Make asyncrohous
 
 
